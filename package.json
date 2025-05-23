@@ -53,6 +53,7 @@
     "core-js": "3.14.0",
     "feather-icons": "4.28.0",
     "flatpickr": "4.6.9",
+    "gh-pages": "^2.0.1",
     "hammerjs": "2.0.8",
     "katex": "0.13.11",
     "lodash": "4.17.21",
