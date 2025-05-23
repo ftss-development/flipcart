@@ -1,0 +1,284 @@
+<!--suppress HtmlUnknownBooleanAttribute, TypeScriptUnresolvedVariable, JSUnusedGlobalSymbols, JSUnusedGlobalSymbols -->
+<div class="d-flex flex-row flex-wrap">
+
+    <div class="flex-lg-column flex-md-column flex-sm-row">
+        <mat-card style="background-color: whitesmoke;margin-top: 20px;margin-left: 20px;margin-right: 20px;">
+            <mat-card-header>
+                <h4 matLine>City Master
+                    <mat-icon color="primary" matSuffix>add_outline</mat-icon>
+                    <mat-icon color="warn" matSuffix>edit_outline</mat-icon>
+                </h4>
+            </mat-card-header>
+            <!--<mat-card-title>
+                
+            </mat-card-title>-->
+            <mat-divider></mat-divider>
+            <mat-card-content>
+                <form #formDirective="ngForm" *ngIf="formGroup" [formGroup]="formGroup"
+                      class="flex-lg-column flex-md-column flex-sm-row">
+                    <mat-form-field appearance="outline">
+                        <mat-label aria-label="Country Name">Country Name</mat-label>
+                        <mat-select (selectionChange)="getStateDropDown($event.value)" formControlName="countryId"
+                                    placeholder="Country Name">
+                            <mat-option>-Select Country-</mat-option>
+                            <mat-option *ngFor="let country of countries$ | async" [value]="country.countryId">
+                                {{country.countryName}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="formErrors.countryId">{{formErrors.countryId}}</mat-error>
+                        <mat-error *ngIf="formGroup.get('countryId')?.errors">
+                            {{ formGroup.get('countryId')?.getError('serverError') }}
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label aria-label="State Name">State Name</mat-label>
+                        <mat-select formControlName="stateId" placeholder="State Name">
+                            <mat-option>-Select Country-</mat-option>
+                            <mat-option *ngFor="let state of states$ | async" [value]="state.stateId">
+                                {{state.stateName}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="formErrors.stateId">{{formErrors.stateId}}</mat-error>
+                        <mat-error *ngIf="formGroup.get('stateId')?.errors">
+                            {{ formGroup.get('stateId')?.getError('serverError') }}
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label aria-label="City Name">City Name</mat-label>
+                        <input formControlName="cityName" matInput maxlength="45" placeholder="City Name"
+                        >
+                        <mat-hint align="end">{{formGroup.controls['cityName'].value?.length || 0}}/45
+                        </mat-hint>
+                        <mat-error *ngIf="formErrors.cityName">{{formErrors.cityName}}</mat-error>
+                        <mat-error *ngIf="formGroup.get('cityName')?.errors">
+                            {{ formGroup.get('cityName')?.getError('serverError') }}
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label aria-label="City Short Name">City Short Name</mat-label>
+                        <input formControlName="cityShortName" matInput maxlength="15" placeholder="City Short Name"
+                        >
+                        <mat-hint align="end">{{formGroup.controls['cityShortName'].value?.length || 0}}/15
+                        </mat-hint>
+                        <mat-error *ngIf="formErrors.cityShortName">{{formErrors.cityShortName}}</mat-error>
+                        <mat-error *ngIf="formGroup.get('cityShortName')?.errors">
+                            {{ formGroup.get('cityShortName')?.getError('serverError') }}
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label aria-label="City Code">City Code</mat-label>
+                        <input formControlName="cityCode" matInput maxlength="7" placeholder="City Code"
+                        >
+                        <mat-hint align="end">{{formGroup.controls['cityCode'].value?.length || 0}}/7
+                        </mat-hint>
+                        <mat-error *ngIf="formErrors.cityCode">{{formErrors.cityCode}}</mat-error>
+                        <mat-error *ngIf="formGroup.get('cityCode')?.errors">
+                            {{ formGroup.get('cityCode')?.getError('serverError') }}
+                        </mat-error>
+                    </mat-form-field>
+                    <span class="justify-content-start align-items-center flex-{grow|shrink}-1">
+                        <mat-checkbox formControlName="isActive">
+                            Status(Active/In-Active)
+                        </mat-checkbox>
+                    </span>
+                    <div class="justify-content-center align-items-center flex-{grow|shrink}-0">
+                        <!--<mat-action-row>-->
+
+                        <button (click)="save(formDirective)" [disabled]="formGroup.pristine|| !formGroup.valid"
+                                aria-label="Save"
+                                color="primary" id="save" mat-raised-button name="save"
+                                style="margin-right:10px"
+                                type="submit">Save
+                        </button>
+                        <button (click)="update(formDirective)" [disabled]="formGroup.pristine|| !formGroup.valid"
+                                aria-label="Update"
+                                color="primary" id="update" mat-raised-button name="update"
+                                style="margin-right:10px;display: none;" type="submit">Update
+                        </button>
+                        <button (click)="rebuildForm(formDirective)" [disabled]="formGroup.pristine" aria-label="Clear"
+                                color="warn"
+                                id="clear"
+                                mat-raised-button name="clear" style="margin-right:10px;" type="button">Clear
+                        </button>
+                        <button (click)="cancel(formDirective)" aria-label="Cancel" color="accent"
+                                id="cancel"
+                                mat-raised-button name="cancel" style="margin-right:10px;display: none;" type="button">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+                <!--<p>{{formGroup.value | json}}</p>-->
+            </mat-card-content>
+
+        </mat-card>
+    </div>
+    <div class="flex-lg-column flex-md-column flex-sm-row">
+        <mat-card style="background-color: whitesmoke;margin-top: 20px;margin-left: 20px;margin-right: 20px;">
+            <mat-card-header>
+                <h4 class="d-flex justify-content-start align-items-center">City Master List</h4>
+                <button #menuTrigger="matMenuTrigger" [matMenuTriggerFor]="mainMenuButton"
+                        class="d-flex justify-content-end align-items-center" mat-icon-button>
+                    <mat-icon>settings</mat-icon>
+                </button>
+                <mat-menu #mainMenuButton="matMenu" style="border: red none 1px;" yPosition="below">
+                    <div (click)='$event.stopPropagation()' *ngFor='let filteredColumn of filteredColumns;index as i'
+                         class="flex-shrink-0 flex-row" style="border: blue none 1px;">
+                        <div class="justify-content-end align-items-center">
+                            <mat-label [hidden]="filteredColumn.isHidden"
+                                       class="label"
+                                       style="padding-left: 5px;padding-right: 5px;">{{filteredColumn.headerColumnName}}</mat-label>
+                        </div>
+                        <div class="d-flex justify-content-end align-items-center">
+                            <mat-slide-toggle (change)="toggleColumn(filteredColumn)"
+                                              [(ngModel)]="filteredColumn.isActive"
+                                              [disabled]="filteredColumn.isMandatory" [hidden]="filteredColumn.isHidden"
+                                              style="padding-left: 5px;padding-right: 10px;">
+                            </mat-slide-toggle>
+                        </div>
+                    </div>
+                </mat-menu>
+            </mat-card-header>
+            <mat-divider></mat-divider>
+            <mat-card-title>
+                <div class="flex-row flex-wrap flex-sm-column flex-sm-wrap" style="padding-top: 10px;"
+                >
+                    <div>
+                        <mat-form-field appearance="outline" style="margin-right: 20px;">
+                            <mat-label style="color:#3f5efb"><b>search</b> within <i>gridview</i></mat-label>
+                            <input #input (keyup)="applyFilter($event)" matInput
+                                   placeholder="e.g, India">
+                        </mat-form-field>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Select filters to apply in searching by clicking here...</mat-label>
+                            <mat-select [formControl]="filterControl" multiple>
+                                <mat-select-trigger>
+                                    <mat-chip-list [formControl]="filterMatChipListControl">
+                                        <mat-chip (removed)="onFilterRemoved(filter)"
+                                                  *ngFor="let filter of filterControl.value" [removable]="true">
+                                            {{ filter }}
+                                            <mat-icon matChipRemove>cancel</mat-icon>
+                                        </mat-chip>
+                                    </mat-chip-list>
+                                </mat-select-trigger>
+
+                                <mat-option *ngFor="let filter of getFilteredColumnListOnly(filteredColumns)"
+                                            [value]="filter">{{filter.headerColumnName}}</mat-option>
+
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </mat-card-title>
+            <mat-divider></mat-divider>
+            <mat-card-content>
+                <div tabindex="0">
+                    <ng-template #spin>
+                        <!--<mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>-->
+                    </ng-template>
+                    <section class="example-table-container mat-elevation-z8">
+                        <table
+                                (cdkDropListDropped)="drop($event)"
+                                [dataSource]="dataSource"
+                                cdkDropList
+                                cdkDropListOrientation="horizontal"
+                                class="grid"
+                                mat-table
+                                matSort
+                                matSortActive="stateName"
+                                matSortDirection="asc"
+                        >
+                            <ng-container matColumnDef="cityId">
+                                <th *matHeaderCellDef cdkDrag mat-header-cell mat-sort-header style="display:none;">
+                                    City Id
+                                </th>
+                                <td *matCellDef="let row" mat-cell style="display:none;">{{row.cityId}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="cityName">
+                                <th *matHeaderCellDef cdkDrag mat-header-cell mat-sort-header
+                                    style="padding-left: 15px;">
+                                    City Name
+                                </th>
+                                <td *matCellDef="let row" mat-cell style="padding-left: 15px;">{{row.cityName}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="cityShortName">
+                                <th *matHeaderCellDef cdkDrag mat-header-cell mat-sort-header>City Short Name</th>
+                                <td *matCellDef="let row" mat-cell>{{row.cityShortName}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="cityCode">
+                                <th *matHeaderCellDef cdkDrag mat-header-cell mat-sort-header>City Code</th>
+                                <td *matCellDef="let row" mat-cell>{{row.cityCode}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="stateId">
+                                <th *matHeaderCellDef cdkDrag mat-header-cell mat-sort-header style="display:none;">
+                                    State Id
+                                </th>
+                                <td *matCellDef="let row" mat-cell style="display:none;">{{row.stateId}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="state">
+                                <th *matHeaderCellDef cdkDrag mat-header-cell mat-sort-header>State Name</th>
+                                <td *matCellDef="let row" mat-cell>{{row.state.stateName}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="country">
+                                <th *matHeaderCellDef cdkDrag mat-header-cell mat-sort-header>Country Name</th>
+                                <td *matCellDef="let row" mat-cell>{{row.country.countryName}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="countryId">
+                                <th *matHeaderCellDef cdkDrag mat-header-cell mat-sort-header style="display:none;">
+                                    Country Id
+                                </th>
+                                <td *matCellDef="let row" mat-cell style="display:none;">{{row.countryId}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="isActive">
+                                <th *matHeaderCellDef cdkDrag mat-header-cell mat-sort-header>Status</th>
+                                <td *matCellDef="let row" mat-cell>{{row.isActive ? 'ACTIVE' : 'IN-ACTIVE'}}</td>
+                            </ng-container>
+
+                            <!-- Action Column -->
+                            <ng-container matColumnDef="edit">
+                                <th *matHeaderCellDef mat-header-cell>Edit</th>
+                                <td *matCellDef="let row" mat-cell>
+                                    <button (click)="edit(row)" mat-icon-button
+                                            matTooltip="Click to Edit">
+                                        <mat-icon style="color:#00cc00;">edit_outline</mat-icon>
+                                    </button>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="delete">
+                                <th *matHeaderCellDef mat-header-cell>Delete</th>
+                                <td *matCellDef="let row" mat-cell>
+                                    <button (click)="delete(row)" color="warn" mat-icon-button
+                                            matTooltip="Click to Delete">
+                                        <mat-icon>delete_outline</mat-icon>
+                                    </button>
+                                </td>
+                            </ng-container>
+
+                            <tr *matHeaderRowDef="dbColumns; sticky: true" mat-header-row></tr>
+                            <tr *matRowDef="let row; columns: dbColumns" mat-row></tr>
+                            <!-- (click)="clickedRows.add(row)" [class.demo-row-is-clicked]="clickedRows.has(row)"-->
+                            <!-- Row shown when there is no matching data. -->
+                            <tr *matNoDataRow class="mat-row">
+                                <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+                            </tr>
+                        </table>
+                        <mat-paginator (page)="pageChanged($event)" [length]="totalRows" [pageIndex]="currentPage"
+                                       [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize"
+                                       aria-label="Select page of cities"
+                                       showFirstLastButtons>
+                        </mat-paginator>
+                    </section>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
